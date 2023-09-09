@@ -45,14 +45,27 @@ namespace Logging.Net.Loggers.SB
         private void LogForConfiguration(LoggingConfiguration c, string str)
         {
             var lns = str.Replace("\r\n", "\n").Split('\n');
-            foreach (var s in lns)
+            if (lns.Length == 0 )
             {
                 var m = c.GetPrefix(c.GetTimePrefix());
                 LoggingHelper.ForegroundColorWrite(m, c.Color);
                 if (LogCallingClass)
                     LoggingHelper.ForegroundColorWrite("(" + LoggingHelper.NameOfCallingClass() + ") ", ConsoleColor.Blue);
-                LoggingHelper.ForegroundColorWriteLine(s, ConsoleColor.White);
-                Addition.ProcessMessage(m, c.Color);
+                LoggingHelper.ForegroundColorWriteLine(str, ConsoleColor.White);
+                Addition.ProcessMessage(m + str, c.Color);
+
+            }
+            else
+            {
+                foreach (var s in lns)
+                {
+                    var m = c.GetPrefix(c.GetTimePrefix());
+                    LoggingHelper.ForegroundColorWrite(m, c.Color);
+                    if (LogCallingClass)
+                        LoggingHelper.ForegroundColorWrite("(" + LoggingHelper.NameOfCallingClass() + ") ", ConsoleColor.Blue);
+                    LoggingHelper.ForegroundColorWriteLine(s, ConsoleColor.White);
+                    Addition.ProcessMessage(m + s, c.Color);
+                }
             }
         }
 
